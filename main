@@ -1,0 +1,62 @@
+package selectivo;
+import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+public class SELECTIVO {
+
+    public static void main(String[] args) throws FileNotFoundException {
+        
+       
+        try {
+//            FileReader ficheroCarreras = new FileReader("C:\\Users\\Comeiro\\Desktop\\ficheros\\selectividad\\fcarreras.txt");
+////            FileReader ficheroAlumnos = new FileReader("C:\\Users\\Comeiro\\Desktop\\ficheros\\selectividad\\estudiantes_lista.txt");
+//            BufferedReader buffer = new BufferedReader(ficheroCarreras);
+            
+            FileInputStream ficheroCarreras; 
+        
+            BufferedReader buffer;
+        
+            InputStreamReader isr;
+            
+            ficheroCarreras = new FileInputStream("C:\\Users\\Comeiro\\Desktop\\ficheros\\selectividad\\fcarreras.txt");
+            
+            isr = new InputStreamReader (ficheroCarreras, "UTF8");
+            
+            buffer = new BufferedReader(isr);
+            
+            
+            //array de tipo carrera para las carreras
+            Carreras[] arrayCarreras = new Carreras[60];
+        
+            String linea = " ";
+            
+            while ((linea=buffer.readLine()) != null)   {
+                String datos[] = linea.split(" ");
+                
+                arrayCarreras[0].codigo = Integer.parseInt(datos[0]);
+                arrayCarreras[0].plazas = Integer.parseInt(datos[1]);
+                
+                System.out.println("Codigo " + arrayCarreras[0].codigo);
+                System.out.println("Plazas " + arrayCarreras[0].plazas);
+            }
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        
+//            //array de tipo alumnos para guardar los datos
+//            Alumnos[] arrayAlumnos = new Alumnos[200]; 
+//        
+        } catch (IOException ex) {
+            Logger.getLogger(SELECTIVO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }
+    
+}
