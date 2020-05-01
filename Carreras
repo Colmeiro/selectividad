@@ -1,13 +1,40 @@
 package selectivo;
 public class Carreras {
     
+    //ATRIBUTOS
     int codigo;
     int plazas;
 
-   
+    
+   //CONSTRUCTOR
     public Carreras(int codigo, int plazas) {
+        
         this.codigo = codigo;
         this.plazas = plazas;
+        
+    }
+    
+    //INICIALIZAR EL ARRAY
+    public static void inicializarArray(Carreras arrayCarreras[])  {
+        for (int i=0;i<arrayCarreras.length;i++)  {
+            arrayCarreras[i] = new Carreras(-1, -2);
+        }
+    }
+    
+    //COMPROBAR LAS SOLICITUDES
+    public static int intentarPeticion(int cod_peticion, Carreras arrayCarreras[]) {
+        int asignacion = 0;
+        
+        for (int celda=0; celda<arrayCarreras.length; celda++) {
+            
+            if ((arrayCarreras[celda].codigo == cod_peticion) && (arrayCarreras[celda].plazas) > 0) {
+                asignacion = cod_peticion;
+                arrayCarreras[celda].plazas = arrayCarreras[celda].plazas - 1;
+                break;
+            }
+        }
+        
+        return asignacion; 
     }
     
 }
