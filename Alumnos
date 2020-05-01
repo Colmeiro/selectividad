@@ -1,0 +1,16 @@
+package selectivo;
+public class Alumnos {
+    
+    float nota;
+    int dni;
+    int carrera1;
+    int carrera2;
+    int carrera3;
+
+    public Alumnos(float nota, int dni, int carrera2, int carrera3) {
+        this.nota = nota;
+        this.dni = dni;
+        this.carrera2 = carrera2;
+        this.carrera3 = carrera3;
+    }
+}
