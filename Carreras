@@ -1,0 +1,13 @@
+package selectivo;
+public class Carreras {
+    
+    int codigo;
+    int plazas;
+
+   
+    public Carreras(int codigo, int plazas) {
+        this.codigo = codigo;
+        this.plazas = plazas;
+    }
+    
+}
