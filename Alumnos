@@ -1,16 +1,30 @@
 package selectivo;
 public class Alumnos {
     
+    //ATRIBUTOS
     float nota;
     int dni;
     int carrera1;
     int carrera2;
     int carrera3;
+    int plaza_obtenida;
 
-    public Alumnos(float nota, int dni, int carrera2, int carrera3) {
+    
+    //CONSTRUCTOR
+    public Alumnos(float nota, int dni, int carrera1, int carrera2, int carrera3, int plaza_obtenida) {
         this.nota = nota;
         this.dni = dni;
         this.carrera2 = carrera2;
         this.carrera3 = carrera3;
+        this.plaza_obtenida = plaza_obtenida;
+    }
+    
+    
+    //INICIALIZAR EL ARRAY
+    public static void inicializarArray(Alumnos arrayAlumnos[])  {
+        for (int i=0;i<arrayAlumnos.length;i++)  {
+            arrayAlumnos[i] = new Alumnos(-1, -2, -3, -4, -5, -6);
+        }
+        
     }
 }
