@@ -5,58 +5,122 @@ import java.util.logging.Logger;
 public class SELECTIVO {
 
     public static void main(String[] args) throws FileNotFoundException {
-        
        
         try {
-//            FileReader ficheroCarreras = new FileReader("C:\\Users\\Comeiro\\Desktop\\ficheros\\selectividad\\fcarreras.txt");
-////            FileReader ficheroAlumnos = new FileReader("C:\\Users\\Comeiro\\Desktop\\ficheros\\selectividad\\estudiantes_lista.txt");
-//            BufferedReader buffer = new BufferedReader(ficheroCarreras);
             
             FileInputStream ficheroCarreras; 
+            FileInputStream ficheroAlumnos; 
+            BufferedReader buffer, buffer2;
         
-            BufferedReader buffer;
-        
-            InputStreamReader isr;
+            InputStreamReader isr, isr2;
             
             ficheroCarreras = new FileInputStream("C:\\Users\\Comeiro\\Desktop\\ficheros\\selectividad\\fcarreras.txt");
+            ficheroAlumnos = new FileInputStream("C:\\Users\\Comeiro\\Desktop\\ficheros\\selectividad\\estudiantes_lista.txt");
             
             isr = new InputStreamReader (ficheroCarreras, "UTF8");
+            isr2 = new InputStreamReader (ficheroAlumnos, "UTF8");
             
             buffer = new BufferedReader(isr);
-            
+            buffer2 = new BufferedReader(isr2);
             
             //array de tipo carrera para las carreras
             Carreras[] arrayCarreras = new Carreras[60];
+            Carreras.inicializarArray(arrayCarreras);
         
             String linea = " ";
+            int celda=0;
             
+            
+            //leer datos y almacenarlos en el array de carreras
             while ((linea=buffer.readLine()) != null)   {
                 String datos[] = linea.split(" ");
                 
-                arrayCarreras[0].codigo = Integer.parseInt(datos[0]);
-                arrayCarreras[0].plazas = Integer.parseInt(datos[1]);
+                arrayCarreras[celda].codigo = Integer.parseInt(datos[0]);
+                arrayCarreras[celda].plazas = Integer.parseInt(datos[1]);
+                celda++;  
+            }
+            
+       
+            //array de tipo alumnos para guardar los datos
+            Alumnos[] arrayAlumnos = new Alumnos[200]; 
+            Alumnos.inicializarArray(arrayAlumnos);
+            celda = 0;
+            
+            while ((linea=buffer2.readLine()) != null)   {
+ 
+                String datos[] = linea.trim().split(" ");//divido la línea y le paso el método trim del que nos hablaste ayer
+                arrayAlumnos[celda].nota = Float.parseFloat(datos[0]);
+                arrayAlumnos[celda].dni = Integer.parseInt(datos[1]);
+                arrayAlumnos[celda].carrera1 = Integer.parseInt(datos[2]);
+                arrayAlumnos[celda].carrera2 = Integer.parseInt(datos[3]);
+                arrayAlumnos[celda].carrera3 = Integer.parseInt(datos[4]);
+                celda++;
+            }
+            
+            //PROCESAMOS LAS PETICIONES DE PLAZA
+            int asignacion;
+            
+            for (celda=0; celda<arrayAlumnos.length; celda++)   {
+                asignacion = Carreras.intentarPeticion(arrayAlumnos[celda].carrera1, arrayCarreras);
                 
-                System.out.println("Codigo " + arrayCarreras[0].codigo);
-                System.out.println("Plazas " + arrayCarreras[0].plazas);
+                //consigue su primera petición
+                if (asignacion != 0)    {
+                    arrayAlumnos[celda].plaza_obtenida = asignacion;
+                }
+                else    {
+                    //consigue la segunsa petición
+                    asignacion = Carreras.intentarPeticion(arrayAlumnos[celda].carrera2, arrayCarreras);
+                    if (asignacion != 0)    {
+                        arrayAlumnos[celda].plaza_obtenida = asignacion;
+                    }
+                    else    {
+                        //consigue la tercera petición
+                        asignacion = Carreras.intentarPeticion(arrayAlumnos[celda].carrera3, arrayCarreras);
+                        if (asignacion != 0)    {
+                            arrayAlumnos[celda].plaza_obtenida = asignacion;
+                        }
+                        
+                        else{
+                            arrayAlumnos[celda].plaza_obtenida = -1;
+                        }
+                    }
+                }
+            }
+            
+            //ORDENAMOS POR DNI A LOS ALUMNOS (BURBUJA)
+            boolean cambio = true;
+            
+            while (cambio)  {
+                cambio = false;
+                for(celda=0; celda < (arrayAlumnos.length -1); celda++)  {
+                    if (arrayAlumnos[celda].dni > arrayAlumnos[celda+1].dni)    {
+                        Alumnos aux = arrayAlumnos[celda];
+                        arrayAlumnos[celda] = arrayAlumnos[celda+1];
+                        arrayAlumnos[celda+1] = aux;
+                        cambio = true;
+                    }                   
+                }   
+            }
+            
+            //MOSTRAMOS EL LISTADO DE ALUMNOS CON EL CÓDIGO DE LA CARRERA ASIGNADA
+            for (celda=0; celda<arrayAlumnos.length; celda++)   {
+                System.out.println((celda+1) + "- NºDNI: " + arrayAlumnos[celda].dni + " - CÓDIGO CARRERA: " + arrayAlumnos[celda].plaza_obtenida);
             }
             
             
+            //ESCRIBIMOS EN UN FICHERO
+            String nombreFichero = "C:\\Users\\Comeiro\\Desktop\\Asignacion_Carreras.txt";
+            String cr = System.lineSeparator();
+            FileWriter fichero_escribir = new FileWriter(nombreFichero);
             
+            for (celda=0; celda<arrayAlumnos.length; celda++) {
+                fichero_escribir.write((celda+1) + "- NºDNI: " + arrayAlumnos[celda].dni + " - CÓDIGO CARRERA: " + arrayAlumnos[celda].plaza_obtenida + cr);
+            }
             
+            fichero_escribir.close();
             
-            
-            
-            
-            
-        
-//            //array de tipo alumnos para guardar los datos
-//            Alumnos[] arrayAlumnos = new Alumnos[200]; 
-//        
         } catch (IOException ex) {
             Logger.getLogger(SELECTIVO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
+        }   
     }
-    
 }
